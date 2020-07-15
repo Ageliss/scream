@@ -1,9 +1,9 @@
 if (NOT DEFINED PROJECT_NAME)
   cmake_minimum_required(VERSION 3.3)
   cmake_policy(SET CMP0057 NEW)
-  set(CIME_BUILD FALSE)
+  set(SCREAM_CIME_BUILD FALSE)
 else()
-  set(CIME_BUILD TRUE)
+  set(SCREAM_CIME_BUILD TRUE)
   set (SCREAM_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
   set (SCREAM_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 endif()
@@ -35,7 +35,7 @@ endif()
 
 set (CMAKE_CXX_STANDARD 11)
 
-if (NOT CIME_BUILD)
+if (NOT SCREAM_CIME_BUILD)
   project(SCREAM CXX Fortran)
 
   # Print the sha of the last commit (useful to double check which version was tested on CDash)
@@ -107,7 +107,7 @@ else()
   set(DEFAULT_MPIRUN_EXE "mpiexec")
 endif()
 set(DEFAULT_LIB_ONLY FALSE)
-if (CIME_BUILD)
+if (SCREAM_CIME_BUILD)
   set(DEFAULT_LIB_ONLY TRUE)
 endif()
 
@@ -225,7 +225,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/scream_config.f.in ${CMAKE_CURREN
 
 set(SCREAM_DYNAMICS_DYCORE "NONE" CACHE STRING "The name of the dycore to be used for dynamics. If NONE, then any code/test requiring dynamics is disabled.")
 
-if (CIME_BUILD)
+if (SCREAM_CIME_BUILD)
   if ("${SCREAM_DYN_TARGET}" STREQUAL "preqx_kokkos")
     set (SCREAM_DYNAMICS_DYCORE "Homme")
   endif()
