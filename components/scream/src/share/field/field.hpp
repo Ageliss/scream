@@ -75,7 +75,7 @@ public:
   get_reshaped_view () const;
 
   // Checks whether the underlying view has been already allocated.
-  bool is_allocated () const { return m_allocated; }
+  bool is_allocated () const { return m_view.data()!=nullptr; }
 
   // ---- Setters and non-const methods ---- //
 
@@ -89,9 +89,6 @@ protected:
 
   // Actual data.
   view_type                       m_view;
-
-  // Keep track of whether the field has been allocated
-  bool                            m_allocated;
 };
 
 template<typename ScalarType, typename DeviceType>
@@ -103,7 +100,6 @@ template<typename ScalarType, typename Device>
 Field<ScalarType,Device>::
 Field (const identifier_type& id)
  : m_header    (new header_type(id))
- , m_allocated (false)
 {
   // At the very least, the allocation properties need to accommodate this field's value_type.
   m_header->get_alloc_properties().request_value_type_allocation<value_type>();
@@ -115,7 +111,6 @@ Field<ScalarType,Device>::
 Field (const Field<SrcScalarType,Device>& src)
  : m_header    (src.get_header_ptr())
  , m_view      (src.get_view())
- , m_allocated (src.is_allocated())
 {
   using src_field_type = Field<SrcScalarType,Device>;
 
@@ -157,14 +152,12 @@ operator= (const Field<SrcScalarType,Device>& src) {
 
   // Since the type of *this and src may be different, we cannot do the usual
   // `if (this!=&src)`, cause the compiler cannot compare those pointers.
-  // Therefore, we compare the stored pointers. Note that we don't compare
-  // the 'm_allocated' member, cause its superfluous.
+  // Therefore, we compare the stored pointers.
   // If either header or view are different, we copy everything
   if (m_header!=src.get_header_ptr() ||
       m_view!=src.get_view()) {
     m_header    = src.get_header_ptr();
     m_view      = src.get_view();
-    m_allocated = src.is_allocated();
   }
 
   return *this;
@@ -182,7 +175,7 @@ Field<ScalarType,Device>::get_reshaped_view () const {
   const auto& field_layout = m_header->get_identifier().get_layout();
 
   // Make sure input field is allocated
-  scream_require_msg(m_allocated, "Error! Cannot reshape a field that has not been allocated yet.\n");
+  scream_require_msg(is_allocated(), "Error! Cannot reshape a field that has not been allocated yet.\n");
 
   // Make sure DstDT has an eligible rank: can only reinterpret if the data type rank does not change or if either src or dst have rank 1.
   constexpr int DstRank = util::GetRanks<DT>::rank;
@@ -223,7 +216,7 @@ void Field<ScalarType,Device>::allocate_view ()
   // a subview of the field). However, it *seems* suspicious to call
   // this method twice, and I think it's more likely than not that
   // such a scenario would indicate a bug. Therefore, I am prohibiting it.
-  scream_require_msg(!m_allocated, "Error! View was already allocated.\n");
+  scream_require_msg(!is_allocated(), "Error! View was already allocated.\n");
 
   // Short names
   const auto& id     = m_header->get_identifier();
@@ -240,8 +233,6 @@ void Field<ScalarType,Device>::allocate_view ()
   const int view_dim = alloc_prop.get_alloc_size() / sizeof(value_type);
 
   m_view = view_type(id.name(),view_dim);
-
-  m_allocated = true;
 }
 
 } // namespace scream
