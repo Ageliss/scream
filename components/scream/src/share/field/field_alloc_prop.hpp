@@ -52,6 +52,9 @@ public:
   int  get_alloc_size () const;
   int  get_last_dim_alloc_size () const;
 
+  template<typename Valuetype>
+  int get_last_dim_extent () const;
+
   template<typename ValueType>
   bool is_allocation_compatible_with_value_type () const;
 
@@ -120,6 +123,15 @@ inline int FieldAllocProp::get_alloc_size () const {
 inline int FieldAllocProp::get_last_dim_alloc_size () const {
   error::runtime_check(m_committed,"Error! You cannot query the allocation properties until they have been committed.");
   return m_last_dim_alloc_size;
+}
+
+template<typename Valuetype>
+inline int FieldAllocProp::get_last_dim_extent () const {
+  error::runtime_check(m_committed,"Error! You cannot query the allocation properties until they have been committed.");
+  scream_require_msg(is_allocation_compatible_with_value_type<Valuetype>(),
+                     "Error! Allocation is not compatible with given value type.\n");
+
+  return get_last_dim_alloc_size() / m_scalar_type_size;
 }
 
 template<typename ValueType>
