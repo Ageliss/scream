@@ -8,14 +8,14 @@ namespace scream {
 class DummyPhysicsGrid : public SEGrid
 {
 public:
-  DummyPhysicsGrid (const int num_cols)
-   : SEGrid(std::string("Physics"),GridType::SE_NodeBased,num_cols)
+  DummyPhysicsGrid (const int num_cols, const Comm& comm)
+   : SEGrid(std::string("Physics"),GridType::SE_NodeBased,num_cols,comm)
   {
     // Nothing to do here
   }
 
-  DummyPhysicsGrid (const int num_cols, const bool fwd)
-   : SEGrid(std::string("Physics") + (fwd ? "_fwd" : "_bwd"),GridType::SE_NodeBased,num_cols)
+  DummyPhysicsGrid (const int num_cols, const bool fwd, const Comm& comm)
+   : SEGrid(std::string("Physics") + (fwd ? "_fwd" : "_bwd"),GridType::SE_NodeBased,num_cols,comm)
   {
     // Nothing to do here
   }

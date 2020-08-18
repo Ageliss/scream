@@ -35,7 +35,8 @@ protected:
 
   grid_repo_type  m_grids;
 
-  ParameterList m_params;
+  ParameterList   m_params;
+  Comm            m_atm_comm;
 };
 
 inline std::shared_ptr<GridsManager>

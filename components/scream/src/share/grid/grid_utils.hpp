@@ -12,6 +12,11 @@ enum class GridType {
   SE_CellBased
 };
 
+enum class LatLonType {
+  Degrees,
+  Radians
+};
+
 inline std::string e2str (const GridType type) {
   std::string str;
   switch (type) {

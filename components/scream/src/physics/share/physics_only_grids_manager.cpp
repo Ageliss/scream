@@ -54,7 +54,7 @@ void PhysicsOnlyGridsManager::build_grid (const std::string& grid_name) {
   }
   Kokkos::deep_copy(phys_dofs,h_phys_dofs);
 
-  m_grids["SE Physics"] = std::make_shared<SEGrid>(phys_dofs,"SE Physics",GridType::SE_NodeBased);
+  m_grids["SE Physics"] = std::make_shared<SEGrid>(phys_dofs,"SE Physics",GridType::SE_NodeBased,m_comm);
 
   if (grid_name==m_params.get<std::string>("Reference Grid")) {
     m_grids["Reference"] = get_grid(grid_name);

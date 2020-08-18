@@ -7,6 +7,7 @@
 #include "ekat/util/scream_factory.hpp"
 #include "ekat/util/ekat_string_utils.hpp"
 #include "ekat/scream_parameter_list.hpp"
+#include "ekat/mpi/scream_comm.hpp"
 #include "ekat/scream_assert.hpp"
 
 #include <map>
@@ -111,9 +112,6 @@ GridsManager::get_grid(const std::string& name) const
 
   return get_repo().at(name);
 }
-
-// Forward declarations
-class Comm;
 
 // A short name for the factory for grid managers
 using GridsManagerFactory 

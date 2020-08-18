@@ -46,18 +46,14 @@ set(ATM_SRC
   dead_mct_mod.F90
   dead_data_mod.F90
   dead_mod.F90
+  ekat_string_utils.F90
+  scream_f2c_mod.F90
+  scream_cpl_indices.F90
   scream_scorpio_interface.F90
   scream_scorpio_interface.cpp
   scream_scorpio_interface_iso_c2f.F90
   ${SCREAM_BASE_DIR}/../cam/src/physics/cam/physics_utils.F90
 )
-
-if (USE_ESMF_LIB)
-  set(ESMFDIR "esmf")
-else()
-  set(ESMFDIR "noesmf")
-endif()
-set(CSM_SHARE "${INSTALL_SHAREDPATH}/${COMP_INTERFACE}/${ESMFDIR}/${NINST_VALUE}/csm_share")
 
 set (SCREAM_LIBS
      scream_share
@@ -68,15 +64,18 @@ set (SCREAM_LIBS
 )
 
 # In CIME builds, create imported targets for scorpio and csm_share
-include (Scorpio)
+include (cime/Scorpio)
 CreateScorpioTarget(TRUE) # Note: the input is whether we want FLIB too. We want/need both, so look for both
-include (CsmShare)
+include (cime/CsmShare)
 CreateCsmShareTarget()
+include (cime/Mct)
+CreateMctTarget()
 
 set (SCREAM_CIME_LIBS
      scream_pioc
      scream_piof
      scream_csm_share
+     scream_mct
 )
 
 # Create atm lib
@@ -90,6 +89,8 @@ set_target_properties(atm PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR
 
 # Link libraries
 target_link_libraries(atm PRIVATE ${SCREAM_LIBS} ${SCREAM_CIME_LIBS})
+message ("atm links against scream libs: ${SCREAM_LIBS}")
+message ("atm links against scream tpls: ${SCREAM_CIME_LIBS}")
 
 if (NOT SCREAM_LIB_ONLY)
   add_subdirectory(tests)

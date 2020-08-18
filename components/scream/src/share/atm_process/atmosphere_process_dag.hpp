@@ -4,6 +4,8 @@
 #include "share/atm_process/atmosphere_process_group.hpp"
 #include "share/field/field_initializer.hpp"
 
+#include <unordered_set>
+
 namespace scream {
 
 class AtmProcDAG {
@@ -15,6 +17,9 @@ public:
   void create_dag (const group_type& atm_procs);
   
   void add_field_initializer (const FieldInitializer& initializer);
+
+  void add_surface_coupling (const std::set<FieldIdentifier>& imports,
+                             const std::set<FieldIdentifier>& exports);
 
   void write_dag (const std::string& fname, const int verbosity = VERB_MAX) const;
 
