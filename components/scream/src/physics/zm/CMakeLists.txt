@@ -1,23 +1,18 @@
 set(CIMEROOT ${SCREAM_BASE_DIR}/../../cime)
 list(APPEND CMAKE_MODULE_PATH ${CIMEROOT}/src/CMake)
 
-set(GENF90 ${CIMEROOT}/src/externals/genf90/genf90.pl)
-set(ENABLE_GENF90 True)
-include(genf90_utils)
-include(Sourcelist_utils)
-
 set(ZM_SRCS
   ${SCREAM_BASE_DIR}/../cam/src/physics/cam/physics_utils.F90
   ${SCREAM_BASE_DIR}/../cam/src/physics/cam/scream_abortutils.F90
   zm_conv.F90
-  atmosphere_deepconvection.cpp
+  atmosphere_deep_convection.cpp
   scream_zm_interface.F90
   zm_inputs_initializer.cpp
 )
 
 set(ZM_HEADERS
   zm.hpp
-  atmosphere_deepconvection.hpp
+  atmosphere_deep_convection.hpp
   scream_zm_interface.hpp
 )
 

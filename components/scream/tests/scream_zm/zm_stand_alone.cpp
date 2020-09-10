@@ -6,7 +6,7 @@
 #include "share/grid/se_grid.hpp"
 #include "control/atmosphere_driver.hpp"
 
-#include "physics/zm/atmosphere_deepconvection.hpp"
+#include "physics/zm/atmosphere_deep_convection.hpp"
 #include "physics/zm/scream_zm_interface.hpp"
 
 #include <iostream>

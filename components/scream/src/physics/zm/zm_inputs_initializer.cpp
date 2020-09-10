@@ -3,7 +3,6 @@
 
 #include <array>
 #include <string>
-#include <iostream>
 #include <typeinfo>
 #include <string>
 
@@ -127,7 +126,7 @@ void set_grid_opts(){
   // Sets the value of the grid opt struct categories
   set_grid_opts_helper(limcnv_in, "limcnv_in", true, NULL, NULL);
   set_grid_opts_helper(no_deep_pbl_in, "no_deep_pbl_in", true, NULL, VECTOR_3D_MID);
-  set_grid_opts_helper(lchnk, "lchnk", true, &Pa, SCALAR_3D_MID); //temperature(K)
+  set_grid_opts_helper(lchnk, "lchnk", false, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(ncol, "ncol", true, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(t, "t", true, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(qh, "qh", true, NULL, SCALAR_3D_MID);
