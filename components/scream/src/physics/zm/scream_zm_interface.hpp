@@ -1,8 +1,11 @@
 #ifndef SCREAM_ZM_INTERFACE_HPP
 #define SCREAM_ZM_INTERFACE_HPP
 
-#include "ekat/scream_assert.hpp"
-#include "ekat/util/scream_utils.hpp"
+#include "ekat/ekat_assert.hpp"
+//#include "ekat/util/scream_utils.hpp"
+#include "ekat/util/ekat_file_utils.hpp"
+
+#include "share/scream_types.hpp"
 
 // Put everything into a scream namespace
 

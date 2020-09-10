@@ -10,19 +10,18 @@ namespace scream
 {
 
 using namespace std;
+std::vector<string> zm_inputs = {"limcnv_in", "no_deep_pbl_in","lchnk", "ncol", "t", "qh", "prec", 
+			"jctop", "jcbot", "pblh", "zm", "geos", "zi", "qtnd", "heat", 
+			"pap", "paph", "dpp", "delt", "mcon", "cme", "cape", "tpert",
+			"dlf", "pflx", "zdu", "rprd", "mu", "md", "du", "eu", "ed", 
+			"dp", "dsubcld", "jt", "maxg", "ideep", "lengath", "ql", 
+			"rliq", "landfrac", "hu_nm1", "cnv_nm1", "tm1", "qm1", "t_star", 
+			"q_star", "dcape", "q", "tend_s", "tend_q", "cld", "snow", 
+			"ntprprd", "ztodt", "ntsnprd", "flxprec", "flxsnow", "pguall", 
+			"pgdall", "icwu", "ncnst", "fracis"};
 
 
 const int INPUT_SIZE = 63;
-
-vector<string> zm_inputs = {"limcnv_in", "no_deep_pbl_in","lchnk", "ncol", "t", "qh", "prec", 
-				"jctop", "jcbot", "pblh", "zm", "geos", "zi", "qtnd", "heat", 
-				"pap", "paph", "dpp", "delt", "mcon", "cme", "cape", "tpert",
-				"dlf", "pflx", "zdu", "rprd", "mu", "md", "du", "eu", "ed", 
-				"dp", "dsubcld", "jt", "maxg", "ideep", "lengath", "ql", 
-				"rliq", "landfrac", "hu_nm1", "cnv_nm1", "tm1", "qm1", "t_star", 
-				"q_star", "dcape", "q", "tend_s", "tend_q", "cld", "snow", 
-				"ntprprd", "ztodt", "ntsnprd", "flxprec", "flxsnow", "pguall", 
-				"pgdall", "icwu", "ncnst", "fracis"};
 
 
 //Layout options are set as an int 
@@ -35,19 +34,20 @@ const int LINEAR = 4;
 
 using namespace std;
 using namespace scream;
+using namespace ekat;
 using namespace units;
 
 struct GridOpts{
   string name;
   bool isOut;
-  const scream::units::Units* unit;
+  const Units* unit;
   int field_idx;
 };
 
 unordered_map<string, GridOpts> opt_map;
 
 //Initializes struct GridOpts fields
-void set_grid_opts_helper(GridOpts O, string n, bool out, const scream::units::Units* unit, int field_idx
+void set_grid_opts_helper(GridOpts O, string n, bool out, const Units* unit, int field_idx
                           ){
   O.name = n;
   O.isOut = out;
@@ -126,7 +126,7 @@ void set_grid_opts(){
   // Sets the value of the grid opt struct categories
   set_grid_opts_helper(limcnv_in, "limcnv_in", true, NULL, NULL);
   set_grid_opts_helper(no_deep_pbl_in, "no_deep_pbl_in", true, NULL, VECTOR_3D_MID);
-  set_grid_opts_helper(lchnk, "lchnk", false, &Pa, SCALAR_3D_MID); //temperature(K)
+  set_grid_opts_helper(lchnk, "lchnk", true, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(ncol, "ncol", true, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(t, "t", true, &Pa, SCALAR_3D_MID); //temperature(K)
   set_grid_opts_helper(qh, "qh", true, NULL, SCALAR_3D_MID);
@@ -212,7 +212,7 @@ void ZMInputsInitializer :: initialize_fields(){
   }
   
 
-  scream_require_msg (count==INPUT_SIZE,
+    EKAT_REQUIRE_MSG (count==INPUT_SIZE,
     "Error! ZMInputsInitializer is expected to init _______________.\n"
     "Only " + std::to_string(count) + " of those have been found.\n"
     "Please, check the atmosphere processes you are using,"
